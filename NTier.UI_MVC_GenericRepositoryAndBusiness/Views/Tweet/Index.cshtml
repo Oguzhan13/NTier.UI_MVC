@@ -1,0 +1,48 @@
+﻿@model List<Tweet>
+
+@if (Model != null)
+{
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>FirstName</td>
+                <td>LastName</td>
+                <td>PersonId</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Tweet tweet in Model)
+            {
+                if (tweet.IsActive)
+                {
+                    <tr>
+                        <td>@tweet.Id</td>
+                        <td>@tweet.Content</td>
+                        <td>@tweet.Topic</td>                        
+                        <td>@tweet.PersonId</td>
+                        <td>
+                            <a class="btn btn-outline-success" asp-action="Create" asp-route-id="@tweet.PersonId">Create</a>
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@tweet.PersonId">Details</a>
+                            <a class="btn btn-outline-warning" asp-action="Update" asp-route-id="@tweet.Id">Update</a>
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@tweet.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>-</td>
+                        <td>@tweet.Content</td>
+                        <td>@tweet.Topic</td>
+                        <td>@tweet.PersonId</td>
+                        <td>
+                            <a class="btn btn-outline-dark" asp-action="Active" asp-route-id="@tweet.Id">Get Active</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>    
+        <a class="btn btn-outline-primary" asp-controller="Person" asp-action="Index">Go to Person List</a>
+}

@@ -1,0 +1,43 @@
+NuGet Packages:
+	- Microsoft.EntityFramework.Core				(for using database in Access Layer)
+	- Microsoft.EntityFramework.Core.SqlServer		(for using SQL database in Access Layer)
+	- Microsoft.EntityFramework.Core.Tools			(for using migrations in Access Layer)
+	- Microsoft.EntityFramework.Core.Design			(in UI Layer)
+
+Create Core.cs class library in solition
+	- Create Abstracts and Concretes folder in Core.cs
+	- Create BaseClass.cs abstract class in abstracts folder	-> Create Person.cs & Tweet.cs classes in concretes folder
+	- Do relationship for Person & Tweet classes
+
+Create Access.cs class library in solition then crete Contexts folder	-> Access or Data or DAL (Data Access Layer)
+	- Add reference project: NTier.Core
+	- Create contructor method and add parameter (parameter's type is DbContextOptions<AppDbContext>) -> add " : base(parameter) " for constructor and parameter name must equal to constructor's parameter name
+	- Add DbSets and override OnModelCreating() method -> Create Configuations folder -> Create BaseConfiguration.cs, PersonConfiguration.cs and TweetConfiguration.cs classes in Configurations folder
+		- ApplyConfiguration for PersonConfiguration and TweetConfiguration in OnModelCreating() method
+		- Use Entity() and HasData() methods to add seed data to modelBuilder in OnModelCreating() method -> Add new Persons in HasData() method or ->
+		- Use PersonConfiguration & TweetConfiguration for HasData(), Relationships and Seed Data
+	- Use Package Manager Console for add-migration & update-database processes
+	- Create Repositories folder in NTier.Access -> Abstracts & Concretes folders in Repositories folder
+		- Create IBaseRepository.cs interface in Abstracts folder & Create BaseRepository.cs clas in Concretes folder 
+			-> BaseRepository inherit IBaseRepository and implement IBaseRepository -> Add the inherit from BaseClass.cs class condition for T
+			-> Add constructor method and do injection process for AppDbContext class
+		- Create IPersonRepository, PersonRepository, ITweetRepository, TweetRepository
+		
+appsettings.Development.json
+	- Add ConnectionStrings for SQL database
+
+Program.cs
+	- Add middleware for builder.Services	-> Use builder.Services.AddDbContex() method with UseSqlServer() method -> this middleware is IoC container
+	- Add middleware for builder.Services	-> Use builder.Services.AddTransient<IPersonRepository, PersonRepository>() and same process for TweetRepository -> Repository Injection
+	- Add middleware for builder.Services	-> User builder.Services.AddScoped<IPersonService, PersonService>() and same process for TweetService -> Service Injection
+	- Do Actions for PersonController -> Do Views for Actions
+
+NTier.UI_MVC_GenericRepositoryAndBusiness.cs
+	- Add reference project: NTier.Access & Add reference project: NTier.Business
+	- Create PersonController in Controllers folder -> Injection process for IPersonService with constructor method in PersonController.cs
+
+Create Business.cs class library in solition	-> Business or Services or BLL (Business Logic Layer)
+	- Create Services folders in Business.cs then create PersonServices and TweetServices folders in Services folder
+	- Create IPersonService.cs interface & PersonService.cs class in PersonServices folder -> Injection process with constructor method in PersonService.cs
+	- Create ITweetService.cs interface & TweetService.cs class in TweetServices folder -> Injection process with constructor method in TweetService.cs
+	- Inherit interfaces for service classes and implement methods -> apply Business processes for Controller's Action processes 

@@ -1,0 +1,45 @@
+﻿@model List<Person>
+
+    @if(Model != null){
+        <table class="table table-dark">
+        <thead>
+            <tr>
+                <td>Id</td>
+                <td>FirstName</td>
+                <td>LastName</td>
+                <td>Transactions</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Person person in Model)
+            {
+                if (person.IsActive)
+                {
+                    <tr>
+                        <td>@person.Id</td>
+                        <td>@person.FirstName</td>
+                        <td>@person.LastName</td>
+                        <td>                        
+                            <a class="btn btn-secondary" asp-controller="Tweet" asp-action="PersonTweets" asp-route-id="@person.Id">Tweets</a>
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@person.Id">Details</a>
+                            <a class="btn btn-outline-warning" asp-action="Update" asp-route-id="@person.Id">Update</a>
+                            <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@person.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td>-</td>
+                        <td>@person.FirstName</td>
+                        <td>@person.LastName</td>
+                        <td>
+                            <a class="btn btn-danger" asp-action="Active" asp-route-id="@person.Id">Get Active</a>                            
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+        </table>
+        <a class="btn btn-success" asp-action="Create">Create Person</a>
+    }
